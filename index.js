@@ -21,19 +21,14 @@ app.use(
 )
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
-  console.log("hi mom")
-
   if (error.name === "CastError" && error.kind === "ObjectId") {
     return response.status(400).send({ error: "malformatted id" })
   } else if (error.name === "ValidationError") {
-    return response.status(400).json({ error: "validation error" })
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
 }
-
-app.use(errorHandler)
 
 let persons = [
   {
@@ -148,6 +143,8 @@ app.put("/api/persons/:id", (req, res, next) => {
     })
     .catch(error => next(error))
 })
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
