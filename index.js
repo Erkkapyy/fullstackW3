@@ -24,7 +24,7 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
   console.log("hi mom")
 
-  if (error.name === "CastError" && error.kind == "ObjectId") {
+  if (error.name === "CastError" && error.kind === "ObjectId") {
     return response.status(400).send({ error: "malformatted id" })
   } else if (error.name === "ValidationError") {
     return response.status(400).json({ error: "validation error" })
@@ -90,7 +90,7 @@ app.get("/api/persons/:id", (req, res, next) => {
       if (person) {
         res.json(person.toJSON())
       } else {
-        response.status(404).end()
+        res.status(404).end()
       }
     })
     .catch(error => next(error))
